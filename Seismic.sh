@@ -128,7 +128,7 @@ deploy_contract() {
 # 合约交互的函数
 interact_contract() {
     echo "开始合约交互..."
-    cd try-devnet/packages/cli/
+    cd /root/try-devnet/packages/cli/
     
     # 安装 Bun
     echo "正在安装 Bun..."
