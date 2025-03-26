@@ -133,6 +133,8 @@ interact_contract() {
     # 安装 Bun
     echo "正在安装 Bun..."
     curl -fsSL https://bun.sh/install | bash
+    
+    # 确保 Bun 命令可用
     source ~/.bashrc  # 确保 Bun 命令可用
 
     # 安装依赖
@@ -150,3 +152,4 @@ interact_contract() {
 
 # 运行主菜单
 main_menu
+
