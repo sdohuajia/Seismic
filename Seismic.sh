@@ -1,37 +1,3 @@
-#!/bin/bash
-
-# 主菜单函数
-function main_menu() {
-    while true; do
-        clear
-        echo "脚本由大赌社区哈哈哈哈编写，推特 @ferdie_jhovie，免费开源，请勿相信收费"
-        echo "如有问题，可联系推特，仅此只有一个号"
-        echo "================================================================"
-        echo "退出脚本，请按键盘 ctrl + C 退出即可"
-        echo "请选择要执行的操作:"
-        echo "1) 部署合约"
-        echo "2) 合约交互"
-        echo "3) 退出"
-        read -p "请输入选项: " choice
-
-        case $choice in
-            1)
-                deploy_contract
-                ;;
-            2)
-                interact_contract
-                ;;
-            3)
-                exit 0
-                ;;
-            *)
-                echo "无效选项，请重新输入"
-                sleep 2
-                ;;
-        esac
-    done
-}
-
 # 部署合约的函数
 deploy_contract() {
     # 检查是否安装 Rust
@@ -94,6 +60,10 @@ deploy_contract() {
 
     # 执行部署脚本
     bash script/deploy.sh
+
+    # 提示用户按任意键返回主菜单
+    echo "合约部署完成，按任意键返回主菜单..."
+    read -n 1 -s
 }
 
 # 合约交互的函数
@@ -109,7 +79,8 @@ interact_contract() {
     
     # 运行交易脚本
     bash script/transact.sh
-}
 
-# 运行主菜单
-main_menu
+    # 提示用户按任意键返回主菜单
+    echo "合约交互完成，按任意键返回主菜单..."
+    read -n 1 -s
+}
