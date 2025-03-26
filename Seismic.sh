@@ -83,17 +83,37 @@ deploy_contract() {
 
     # 下载并执行 Seismic Foundry 安装脚本
     echo "正在安装 Seismic Foundry..."
-    curl -L -H "Accept: application/vnd.github.v3.raw" "https://api.github.com/repos/SeismicSystems/seismic-foundry/contents/sfoundryup/install?ref=seismic" | bash
+    curl -L \
+         -H "Accept: application/vnd.github.v3.raw" \
+         "https://api.github.com/repos/SeismicSystems/seismic-foundry/contents/sfoundryup/install?ref=seismic" | bash
 
-    # 重新加载 shell 配置
+    # 修改 ~/.bashrc 文件，确保环境变量正确加载
+    echo "正在修改 ~/.bashrc 以确保环境变量生效..."
+    echo "export PATH=\$PATH:/root/.seismic/bin" >> ~/.bashrc
+
+    # 重新加载 ~/.bashrc 文件
     source ~/.bashrc
 
+    # 检查 sfoundryup 是否可用
+    if command -v sfoundryup &> /dev/null
+    then
+        echo "sfoundryup 安装成功！"
+    else
+        echo "sfoundryup 未安装成功，请检查安装步骤。"
+        exit 1
+    fi
+
     # 运行 sfoundryup
+    echo "正在运行 sfoundryup..."
     sfoundryup
 
     # 克隆 SeismicSystems/try-devnet 仓库并进入目录
-    echo "克隆 SeismicSystems/try-devnet 仓库..."
-    git clone --recurse-submodules https://github.com/SeismicSystems/try-devnet.git
+    if [ ! -d "try-devnet" ]; then
+        echo "克隆 SeismicSystems/try-devnet 仓库..."
+        git clone --recurse-submodules https://github.com/SeismicSystems/try-devnet.git
+    else
+        echo "try-devnet 仓库已存在，跳过克隆步骤。"
+    fi
     cd try-devnet/packages/contract/
 
     # 执行部署脚本
