@@ -61,6 +61,24 @@ deploy_contract() {
         echo "jq 安装完成，当前版本：$(jq --version)"
     fi
 
+    # 检查是否安装 unzip
+    if command -v unzip &> /dev/null
+    then
+        echo "unzip 已安装"
+    else
+        echo "unzip 未安装，正在安装..."
+        # 根据系统类型安装 unzip
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            sudo apt-get update && sudo apt-get install -y unzip
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            brew install unzip
+        else
+            echo "不支持的系统，请手动安装 unzip"
+            exit 1
+        fi
+        echo "unzip 安装完成"
+    fi
+
     # 下载并执行 Seismic Foundry 安装脚本
     curl -L \
          -H "Accept: application/vnd.github.v3.raw" \
