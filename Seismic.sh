@@ -84,15 +84,22 @@ deploy_contract() {
     # 下载并执行 Seismic Foundry 安装脚本
     echo "正在安装 Seismic Foundry..."
     curl -L \
-         -H "Accept: application/vnd.github.v3.raw" \
-         "https://api.github.com/repos/SeismicSystems/seismic-foundry/contents/sfoundryup/install?ref=seismic" | bash
+     -H "Accept: application/vnd.github.v3.raw" \
+     "https://api.github.com/repos/SeismicSystems/seismic-foundry/contents/sfoundryup/install?ref=seismic" | bash
 
-    # 修改 ~/.bashrc 文件，确保环境变量正确加载
-    echo "正在修改 ~/.bashrc 以确保环境变量生效..."
-    echo "export PATH=\$PATH:/root/.seismic/bin" >> ~/.bashrc
+    # 获取安装后新添加的路径
+    NEW_PATH=$(bash -c 'source /root/.bashrc && echo $PATH')
 
-    # 重新加载 ~/.bashrc 文件
-    source ~/.bashrc
+    # 更新当前shell的PATH
+    export PATH="$NEW_PATH"
+
+    # 确保 ~/.seismic/bin 在 PATH 中
+    if [[ ":$PATH:" != *":/root/.seismic/bin:"* ]]; then
+    export PATH="/root/.seismic/bin:$PATH"
+    fi
+
+    # 打印当前 PATH，确保 sfoundryup 在其中
+    echo "当前 PATH: $PATH"
 
     # 检查 sfoundryup 是否可用
     if command -v sfoundryup &> /dev/null
