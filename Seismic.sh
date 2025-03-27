@@ -135,7 +135,6 @@ deploy_contract() {
 # 合约交互的函数
 interact_contract() {
     echo "开始合约交互..."
-    cd /root/try-devnet/packages/cli/
     
     # 安装 Bun
     echo "正在安装 Bun..."
@@ -143,9 +142,10 @@ interact_contract() {
     
     # 确保 Bun 命令可用
     source ~/.bashrc  # 确保 Bun 命令可用
-
+    
     # 安装依赖
     echo "安装 Bun 依赖..."
+    cd /root/try-devnet/packages/cli/
     bun install
     
     # 运行交易脚本
